@@ -197,3 +197,50 @@ void CImageProcessingDoc::OnProcessComposite() // for term project #1
 	CalculateHistogram();
 	UpdateAllViews(NULL);
 }
+
+void CImageProcessingDoc::ApplyCompositeOperation(int nOperatorID, CxImage* pSecondImage) // for term project #1 (automatic use)
+{
+	if (!m_pImage || !pSecondImage)
+		return;
+
+	DWORD width = m_pImage->GetWidth();
+	DWORD height = m_pImage->GetHeight();
+	RGBQUAD firstColor;
+	RGBQUAD secondColor;
+	RGBQUAD newColor;
+
+	for (DWORD y = 0; y < height; y++) {
+		for (DWORD x = 0; x < width; x++) {
+			firstColor = m_pImage->GetPixelColor(x, y);
+			secondColor = pSecondImage->GetPixelColor(x, y);
+
+			switch (nOperatorID) {
+			case 0: // +
+				newColor.rgbRed = min(255, firstColor.rgbRed + secondColor.rgbRed);
+				newColor.rgbGreen = min(255, firstColor.rgbGreen + secondColor.rgbGreen);
+				newColor.rgbBlue = min(255, firstColor.rgbBlue + secondColor.rgbBlue);
+				break;
+
+			case 1: // - (neagtive prevented)
+				newColor.rgbRed = max(0, firstColor.rgbRed - secondColor.rgbRed);
+				newColor.rgbGreen = max(0, firstColor.rgbGreen - secondColor.rgbGreen);
+				newColor.rgbBlue = max(0, firstColor.rgbBlue - secondColor.rgbBlue);
+				break;
+
+			case 2: // average	composite
+				newColor.rgbRed = (firstColor.rgbRed + secondColor.rgbRed) / 2;
+				newColor.rgbGreen = (firstColor.rgbGreen + secondColor.rgbGreen) / 2;
+				newColor.rgbBlue = (firstColor.rgbBlue + secondColor.rgbBlue) / 2;
+				break;
+
+			default: // default
+				newColor = firstColor;
+				break;
+			}
+
+			newColor.rgbReserved = 0;
+			m_pImage->SetPixelColor(x, y, newColor);
+		}
+	CalculateHistogram();
+	UpdateAllViews(NULL);
+}

@@ -12,10 +12,30 @@
 #include "ImageProcessingDoc.h"
 #include "ImageProcessingView.h"
 
+// for automatic picture opening
+#include <Windows.h>
+#include <Shlwapi.h> // for PathRemoveFileSpec
+#pragma comment(lib, "Shlwapi.lib") // linker needs this lib
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
 
+// helper for automatic picture opening
+CString GetTestImagePath(const CString& relativePath)
+{
+	TCHAR exePath[MAX_PATH];
+	GetModuleFileName(NULL, exePath, MAX_PATH);
+	PathRemoveFileSpec(exePath); // remove file name ? Debug\
+
+	// one level higher dann debug: project root
+	PathRemoveFileSpec(exePath);
+
+	CString root = CString(exePath);
+	root += _T("\\");
+	root += relativePath;
+	return root;
+}
 
 // CImageProcessingApp
 
@@ -107,6 +127,29 @@ BOOL CImageProcessingApp::InitInstance()
 	// 주 창이 초기화되었으므로 이를 표시하고 업데이트합니다.
 	pMainFrame->ShowWindow(m_nCmdShow);
 	pMainFrame->UpdateWindow();
+
+	// open squid pictures
+	CDocument* pDocBody = OpenDocumentFile(GetTestImagePath(_T("Term_Project_01_Sample Images\\squid_body.jpg")));
+	CDocument* pDocHead = OpenDocumentFile(GetTestImagePath(_T("Term_Project_01_Sample Images\\squid_head.jpg")));
+	CDocument* pDocPoints = OpenDocumentFile(GetTestImagePath(_T("Term_Project_01_Sample Images\\squid_points.jpg")));
+
+	// cast image pointers to custom CDocument type
+	CImageProcessingDoc* pImgDocBody = dynamic_cast<CImageProcessingDoc*>(pDocBody);
+	CImageProcessingDoc* pImgDocHead = dynamic_cast<CImageProcessingDoc*>(pDocHead);
+	CImageProcessingDoc* pImgDocPoints = dynamic_cast<CImageProcessingDoc*>(pDocPoints);
+
+	if (pImgDocBody && pImgDocHead && pImgDocPoints) { // check if pictures were opened
+
+		CxImage* pSecondImage = pImgDocHead->GetImage(); // choose head as second image
+		pImgDocBody->ApplyCompositeOperation(0, pSecondImage); // add head to first image (body)
+
+		pSecondImage = pImgDocPoints->GetImage(); // choose points as second image
+		pImgDocBody->ApplyCompositeOperation(1, pSecondImage); // substract points from first image (body + head)
+
+		// close other pictures
+		pDocHead->OnCloseDocument();
+		pDocPoints->OnCloseDocument();
+	}
 
 	return TRUE;
 }

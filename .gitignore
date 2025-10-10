@@ -10,6 +10,9 @@
 *.dylib
 *.lib
 *.a
+*.log
+*.tlog
+*.db
 
 # Executable name from the previous example
 # 예제에서 사용한 실행 파일 이름
@@ -21,6 +24,8 @@ build/
 bin/
 Debug/
 Release/
+x64/
+ipch/
 
 # IDE and editor configuration files
 # 각종 IDE 및 에디터 관련 설정 파일

@@ -6,7 +6,56 @@ A simple command-line application written in C++ that classifies basic shapes (c
 
 -----
 
-## \#\# Features
+## Prerequisites
+
+* **Visual Studio**: Visual Studio 2019 or 2022 with the **Desktop development with C++** workload installed.
+* **OpenCV**: A pre-built OpenCV library for Windows.
+    * You can download it from the [official OpenCV releases page](https://opencv.org/releases/).
+    * It is recommended to extract the library to a simple path, such as `C:\opencv`.
+
+***
+
+## Project Setup
+
+1.  **Create a Visual Studio Project**
+    * Open Visual Studio and create a new **C++ Console App** project.
+
+2.  **Add Source Files**
+    * Add the provided source files (`main.cpp`, `image.cpp`, `feature.cpp`) and header files (`image.h`, `feature.h`) to the project.
+
+3.  **Configure Project Properties**
+    * In the **Solution Explorer**, right-click the project name and go to **Properties**.
+    * At the top of the window, change the **Platform** to **x64**.
+    * The following settings should be configured with the **Configuration** set to **All Configurations**, unless specified otherwise.
+
+    ---
+
+    #### A. C/C++ Settings
+    * **C/C++ > General > Additional Include Directories**:
+        * Add the path to your OpenCV installation's `build\include` folder.
+        * Example: `C:\opencv\build\include`
+
+    * **C/C++ > Code Generation > Runtime Library**:
+        * For **Debug** configuration: **Multi-threaded Debug DLL (/MDd)**
+        * For **Release** configuration: **Multi-threaded DLL (/MD)**
+
+    ---
+
+    #### B. Linker Settings
+    * **Linker > General > Additional Library Directories**:
+        * Add the path to the `lib` folder corresponding to your Visual Studio version.
+        * For VS 2019: `C:\opencv\build\x64\vc16\lib`
+        * For VS 2022: `C:\opencv\build\x64\vc17\lib`
+
+    * **Linker > Input > Additional Dependencies**:
+        * Add the names of the OpenCV `.lib` files to link. (XXXX is the version number).
+        ```
+        opencv_worldXXXX.lib
+        opencv_worldXXXXd.lib
+        ```
+***
+
+## Features
 
   * **Image Loading**: Loads `.jpg` images using the OpenCV library.
   * **Manual Image Processing**: Implements all processing steps manually, including:
@@ -21,14 +70,8 @@ A simple command-line application written in C++ that classifies basic shapes (c
 
 -----
 
-## \#\# Prerequisites
 
-  * A C++ compiler that supports C++11 or newer (e.g., GCC, Clang, MSVC).
-  * **OpenCV**: This library is required *only* for loading images. Ensure it is installed on your system.
-
------
-
-## \#\# How to Build and Run
+## How to Build and Run
 
 1.  **Clone the Repository**:
 
@@ -37,21 +80,25 @@ A simple command-line application written in C++ that classifies basic shapes (c
     cd <your-repository-directory>
     ```
 
-2.  **Compile the Code**:
-    You need to link the OpenCV libraries during compilation. The following is an example command using `g++`.
+2. **Prepare Input Images**
 
-    ```bash
-    g++ main.cpp image.cpp feature.cpp -o shape_classifier $(pkg-config --cflags --libs opencv4)
-    ```
+* Prepare the input image files (1.jpg, 2.jpg, 3.jpg, 4.jpg).
 
-    *Note: If your OpenCV version is different, you might need to change `opencv4` to the appropriate name (e.g., `opencv`).*
+* Copy these files into the main project folder (the one containing the .vcxproj file).
 
-3.  **Run the Application**:
-    Make sure the image files (`1.jpg` for a circle, `2.jpg` for a triangle) are in the same directory as the executable.
+3. **Copy DLL Files**
 
-    ```bash
-    ./shape_classifier
-    ```
+* Navigate to the bin folder of your OpenCV installation (e.g., C:\opencv\build\x64\vc16\bin).
+
+* Copy the opencv_worldXXXX.dll and opencv_worldXXXXd.dll files.
+
+* Paste them into the project's build output folder (e.g., YourProjectFolder\x64\Release).
+
+4. **Build and Run**
+
+* In the Visual Studio toolbar, set the build configuration to Release | x64.
+
+* Press Ctrl+F5 or go to Debug > Start Without Debugging to run the program.
 
 -----
 

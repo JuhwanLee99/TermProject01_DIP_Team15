@@ -1,14 +1,28 @@
-#include "image.h"
-#include <opencv2/opencv.hpp> // Used only for imread
+﻿#include "image.h"
+#include <opencv2/opencv.hpp> // Used only for imdecode and other classes
 #include <iostream>
 #include <vector>
 #include <cmath>
+#include <fstream>
 
 // 1. Load image (using OpenCV)
 Image loadImage(const std::string& filename) {
-    cv::Mat mat = cv::imread(filename, cv::IMREAD_COLOR);
+    std::ifstream ifs(filename, std::ios::binary);
+    if (!ifs) {
+        std::cerr << "Error: Cannot open file " << filename << std::endl;
+        exit(1);
+    }
+
+    ifs.seekg(0, std::ios::end);
+    std::streamsize size = ifs.tellg();
+    ifs.seekg(0, std::ios::beg);
+
+    std::vector<uchar> buf(static_cast<size_t>(size));
+    ifs.read(reinterpret_cast<char*>(buf.data()), size);
+
+    cv::Mat mat = cv::imdecode(buf, cv::IMREAD_COLOR);
     if (mat.empty()) {
-        std::cerr << "Error: Cannot open " << filename << std::endl;
+        std::cerr << "Error: Cannot decode " << filename << std::endl;
         exit(1);
     }
 
@@ -17,8 +31,8 @@ Image loadImage(const std::string& filename) {
     img.height = mat.rows;
     img.data.resize(img.width * img.height);
 
-    for (int y = 0; y < img.height; y++) {
-        for (int x = 0; x < img.width; x++) {
+    for (int y = 0; y < img.height; ++y) {
+        for (int x = 0; x < img.width; ++x) {
             cv::Vec3b color = mat.at<cv::Vec3b>(y, x);
             Pixel p = { color[2], color[1], color[0] }; // BGR -> RGB
             img.data[y * img.width + x] = p;

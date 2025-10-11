@@ -9,8 +9,6 @@ using namespace std;
 int main() {
     for (int i = 1; i <= 4; i++) { // additional 3 & 4 for prove the algorithm
         string filename = to_string(i) + ".jpg";
-        //string filename = "C:\\Users\\jimmy\\Documents\\ImageProcessing\\project1\\ExtraProject\\ExtraProject\\ExtraProject\\1.jpg";
-        //string filename = "C:\\Users\\jimmy\\Documents\\ImageProcessing\\3.jpg";
 
         // 1. Load image
         Image img = loadImage(filename);

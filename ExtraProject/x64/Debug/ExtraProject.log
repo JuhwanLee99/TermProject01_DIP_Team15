@@ -1,1 +1,17 @@
-﻿  ExtraProject.vcxproj -> C:\Users\jimmy\Documents\ImageProcessing\project1\ExtraProject\ExtraProject\x64\Debug\ExtraProject.exe
+﻿  feature.cpp
+  image.cpp
+C:\opencv\build\include\opencv2\core.hpp(1,1): warning C4819: The file contains a character that cannot be represented in the current code page (949). Save the file in Unicode format to prevent data loss
+  (compiling source file 'image.cpp')
+  
+C:\opencv\build\include\opencv2\core.hpp(1,1): warning C4819: The file contains a character that cannot be represented in the current code page (949). Save the file in Unicode format to prevent data loss
+  (compiling source file 'image.cpp')
+  
+C:\opencv\build\include\opencv2\core.hpp(1,1): warning C4819: The file contains a character that cannot be represented in the current code page (949). Save the file in Unicode format to prevent data loss
+  (compiling source file 'image.cpp')
+  
+C:\opencv\build\include\opencv2\imgcodecs.hpp(1,1): warning C4819: The file contains a character that cannot be represented in the current code page (949). Save the file in Unicode format to prevent data loss
+  (compiling source file 'image.cpp')
+  
+  main.cpp
+  Generating Code...
+  ExtraProject.vcxproj -> C:\Users\jimmy\Documents\ImageProcessing\project1\team15_01\x64\Debug\ExtraProject.exe

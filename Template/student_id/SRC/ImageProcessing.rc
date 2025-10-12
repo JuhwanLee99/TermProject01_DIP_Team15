@@ -327,6 +327,7 @@ BEGIN
         MENUITEM "&Brightness",                 ID_PROCESS_BRIGHTNESS
         MENUITEM "&Mosaic",                     ID_PROCESS_MOSAIC
         MENUITEM "&Composite",                  ID_PROCESS_COMPOSITE
+        MENUITEM "Auto Composite Squid Images", ID_AUTO_COMPOSITE_SQUID_IMAGES
         MENUITEM "&Intensity Transform",        ID_PROCESS_INTENSITY_TRANSFORM
         MENUITEM "Contrast &Stretch",           ID_PROCESS_CONTRAST_STRETCH
         MENUITEM "Histogram &Equalization",     ID_PROCESS_EQUALIZATION

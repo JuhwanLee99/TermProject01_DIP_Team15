@@ -59,6 +59,7 @@ protected:
 	afx_msg void OnProcessBrightness();
 	afx_msg void OnProcessMosaic();
 	afx_msg void OnProcessComposite();
+	afx_msg void OnAutoCompositeSquidImages();
 	afx_msg void OnProcessIntensityTransform();
 
 	DECLARE_MESSAGE_MAP()	

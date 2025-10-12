@@ -191,11 +191,11 @@ void CImageProcessingApp::OnOpenSquidImages()
 	GetCurrentDirectory(MAX_PATH, szCurDir);
 	CString strCurDir = szCurDir;
 
-	CString path1 = strCurDir + _T("\\Term_Project_01_Sample Images\\squid_body.jpg");
-	CString path2 = strCurDir + _T("\\Term_Project_01_Sample Images\\squid_head.jpg");
-	CString path3 = strCurDir + _T("\\Term_Project_01_Sample Images\\squid_points.jpg");
+	CString squidHeadPath = strCurDir + _T("\\Term_Project_01_Sample Images\\squid_head.jpg");
+	CString squidBodyPath = strCurDir + _T("\\Term_Project_01_Sample Images\\squid_body.jpg");
+	CString squidPointsPath = strCurDir + _T("\\Term_Project_01_Sample Images\\squid_points.jpg");
 
-	OpenDocumentFile(path1);
-	OpenDocumentFile(path2);
-	OpenDocumentFile(path3);
+	OpenDocumentFile(squidHeadPath);
+	OpenDocumentFile(squidBodyPath);
+	OpenDocumentFile(squidPointsPath);
 }

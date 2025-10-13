@@ -48,13 +48,15 @@
 #define ID_32781                        32781
 #define ID_PROCESS_EQUALIZATION         32782
 #define ID_32783                        32783
+#define ID_OPEN_SQUID_IMAGES            32784
+#define ID_AUTO_COMPOSITE_SQUID_IMAGES	32785
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        321
-#define _APS_NEXT_COMMAND_VALUE         32784
+#define _APS_NEXT_COMMAND_VALUE         32786
 #define _APS_NEXT_CONTROL_VALUE         1020
 #define _APS_NEXT_SYMED_VALUE           319
 #endif

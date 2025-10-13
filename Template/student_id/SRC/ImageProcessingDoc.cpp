@@ -165,7 +165,7 @@ void CImageProcessingDoc::CalculateHistogram()
 		 //m_histogramMax = m_pImage->Histogram(m_histogramRed, m_histogramGreen, m_histogramBlue, m_histogramGray);
 
 		 
-		// ��¥�ڵ�
+		// °¡Â¥ÄÚµå
 		for (int i = 0; i < 256; i++){
 			m_histogramRed[i]   = rand() % 200;
 			m_histogramGreen[i] = rand() % 200;

@@ -37,6 +37,7 @@ public:
 	CString RemoveExtension(const CString& name);
 	int FindType(const CString& ext);
 	void CalculateHistogram();
+	void ApplyCompositeOperation(int nOperatorID, CxImage* pSecondImage);
 
 // 재정의입니다.
 public:

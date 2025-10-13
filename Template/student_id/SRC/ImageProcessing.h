@@ -28,6 +28,7 @@ public:
 // 구현입니다.
 	afx_msg void OnAppAbout();
 	afx_msg void OnFileOpen();
+	afx_msg void OnOpenSquidImages();
 	DECLARE_MESSAGE_MAP()
 };
 

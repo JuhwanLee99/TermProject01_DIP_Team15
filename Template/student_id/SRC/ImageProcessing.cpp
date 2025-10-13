@@ -45,6 +45,7 @@ BEGIN_MESSAGE_MAP(CImageProcessingApp, CWinApp)
 	ON_COMMAND(ID_FILE_NEW, &CWinApp::OnFileNew)
 	ON_COMMAND(ID_FILE_OPEN, &CImageProcessingApp::OnFileOpen)
 	// 표준 인쇄 설정 명령입니다.
+	ON_COMMAND(ID_OPEN_SQUID_IMAGES, &CImageProcessingApp::OnOpenSquidImages)
 	ON_COMMAND(ID_FILE_PRINT_SETUP, &CWinApp::OnFilePrintSetup)
 END_MESSAGE_MAP()
 
@@ -225,4 +226,19 @@ void CImageProcessingApp::OnFileOpen()
 	{
 		OpenDocumentFile(fileDlg.GetPathName());
 	}
+}
+
+void CImageProcessingApp::OnOpenSquidImages()
+{
+	TCHAR szCurDir[MAX_PATH] = { 0 };
+	GetCurrentDirectory(MAX_PATH, szCurDir);
+	CString strCurDir = szCurDir;
+
+	CString squidHeadPath = strCurDir + _T("\\Term_Project_01_Sample Images\\squid_head.jpg");
+	CString squidBodyPath = strCurDir + _T("\\Term_Project_01_Sample Images\\squid_body.jpg");
+	CString squidPointsPath = strCurDir + _T("\\Term_Project_01_Sample Images\\squid_points.jpg");
+
+	OpenDocumentFile(squidHeadPath);
+	OpenDocumentFile(squidBodyPath);
+	OpenDocumentFile(squidPointsPath);
 }

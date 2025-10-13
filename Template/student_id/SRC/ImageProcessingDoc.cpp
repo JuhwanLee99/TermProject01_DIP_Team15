@@ -15,6 +15,7 @@ IMPLEMENT_DYNCREATE(CImageProcessingDoc, CDocument)
 
 BEGIN_MESSAGE_MAP(CImageProcessingDoc, CDocument)
 	ON_COMMAND(ID_PROCESS_COMPOSITE, &CImageProcessingDoc::OnProcessComposite)
+	ON_COMMAND(ID_AUTO_COMPOSITE_SQUID_IMAGES, &CImageProcessingDoc::OnAutoCompositeSquidImages)
 END_MESSAGE_MAP()
 
 
@@ -30,6 +31,45 @@ CImageProcessingDoc::~CImageProcessingDoc()
 {
 	if (NULL != m_pImage)
 		delete m_pImage;
+}
+
+// adaption of OnProcessComposite with use of args instead of dialogue for automatic use
+static void CompositeImages(CxImage* pFirst, CxImage* pSecond, int nOperatorID)
+{
+	if (!pFirst || !pSecond)
+		return;
+
+	DWORD width = pFirst->GetWidth();
+	DWORD height = pFirst->GetHeight();
+	RGBQUAD firstColor, secondColor, newColor;
+
+	for (DWORD y = 0; y < height; y++) {
+		for (DWORD x = 0; x < width; x++) {
+			firstColor = pFirst->GetPixelColor(x, y);
+			secondColor = pSecond->GetPixelColor(x, y);
+
+			switch (nOperatorID) {
+			case 0: // +
+				newColor.rgbRed = min(255, firstColor.rgbRed + secondColor.rgbRed);
+				newColor.rgbGreen = min(255, firstColor.rgbGreen + secondColor.rgbGreen);
+				newColor.rgbBlue = min(255, firstColor.rgbBlue + secondColor.rgbBlue);
+				break;
+
+			case 1: // -
+				newColor.rgbRed = max(0, firstColor.rgbRed - secondColor.rgbRed);
+				newColor.rgbGreen = max(0, firstColor.rgbGreen - secondColor.rgbGreen);
+				newColor.rgbBlue = max(0, firstColor.rgbBlue - secondColor.rgbBlue);
+				break;
+
+			default:
+				newColor = firstColor;
+				break;
+			}
+
+			newColor.rgbReserved = 0;
+			pFirst->SetPixelColor(x, y, newColor);
+		}
+	}
 }
 
 BOOL CImageProcessingDoc::OnOpenDocument(LPCTSTR lpszPathName) 
@@ -125,7 +165,7 @@ void CImageProcessingDoc::CalculateHistogram()
 		 //m_histogramMax = m_pImage->Histogram(m_histogramRed, m_histogramGreen, m_histogramBlue, m_histogramGray);
 
 		 
-		// ��¥�ڵ�
+		// °¡Â¥ÄÚµå
 		for (int i = 0; i < 256; i++){
 			m_histogramRed[i]   = rand() % 200;
 			m_histogramGreen[i] = rand() % 200;
@@ -198,49 +238,49 @@ void CImageProcessingDoc::OnProcessComposite() // for term project #1
 	UpdateAllViews(NULL);
 }
 
-void CImageProcessingDoc::ApplyCompositeOperation(int nOperatorID, CxImage* pSecondImage) // for term project #1 (automatic use)
+void CImageProcessingDoc::OnAutoCompositeSquidImages()
 {
-	if (!m_pImage || !pSecondImage)
-		return;
+	CImageProcessingDoc* pHeadDoc = nullptr;
+	CImageProcessingDoc* pBodyDoc = nullptr;
+	CImageProcessingDoc* pPointsDoc = nullptr;
 
-	DWORD width = m_pImage->GetWidth();
-	DWORD height = m_pImage->GetHeight();
-	RGBQUAD firstColor;
-	RGBQUAD secondColor;
-	RGBQUAD newColor;
+	POSITION posTemplate = AfxGetApp()->GetFirstDocTemplatePosition();
+	while (posTemplate != NULL)
+	{
+		CDocTemplate* pTemplate = AfxGetApp()->GetNextDocTemplate(posTemplate);
+		POSITION posDoc = pTemplate->GetFirstDocPosition();
+		while (posDoc != NULL)
+		{
+			CDocument* pDoc = pTemplate->GetNextDoc(posDoc);
+			CImageProcessingDoc* pImgDoc = DYNAMIC_DOWNCAST(CImageProcessingDoc, pDoc);
+			if (pImgDoc != nullptr && pImgDoc->GetImage() != nullptr)
+			{
+				CString filePath = pImgDoc->GetPathName();
 
-	for (DWORD y = 0; y < height; y++) {
-		for (DWORD x = 0; x < width; x++) {
-			firstColor = m_pImage->GetPixelColor(x, y);
-			secondColor = pSecondImage->GetPixelColor(x, y);
-
-			switch (nOperatorID) {
-			case 0: // +
-				newColor.rgbRed = min(255, firstColor.rgbRed + secondColor.rgbRed);
-				newColor.rgbGreen = min(255, firstColor.rgbGreen + secondColor.rgbGreen);
-				newColor.rgbBlue = min(255, firstColor.rgbBlue + secondColor.rgbBlue);
-				break;
-
-			case 1: // - (neagtive prevented)
-				newColor.rgbRed = max(0, firstColor.rgbRed - secondColor.rgbRed);
-				newColor.rgbGreen = max(0, firstColor.rgbGreen - secondColor.rgbGreen);
-				newColor.rgbBlue = max(0, firstColor.rgbBlue - secondColor.rgbBlue);
-				break;
-
-			case 2: // average	composite
-				newColor.rgbRed = (firstColor.rgbRed + secondColor.rgbRed) / 2;
-				newColor.rgbGreen = (firstColor.rgbGreen + secondColor.rgbGreen) / 2;
-				newColor.rgbBlue = (firstColor.rgbBlue + secondColor.rgbBlue) / 2;
-				break;
-
-			default: // default
-				newColor = firstColor;
-				break;
+				if (filePath.Find(_T("squid_head")) != -1)
+					pHeadDoc = pImgDoc;
+				else if (filePath.Find(_T("squid_body")) != -1)
+					pBodyDoc = pImgDoc;
+				else if (filePath.Find(_T("squid_points")) != -1)
+					pPointsDoc = pImgDoc;
 			}
-
-			newColor.rgbReserved = 0;
-			m_pImage->SetPixelColor(x, y, newColor);
 		}
-	CalculateHistogram();
-	UpdateAllViews(NULL);
+	}
+
+	if (pHeadDoc == nullptr || pBodyDoc == nullptr || pPointsDoc == nullptr)
+	{
+		AfxMessageBox(_T("Alle 3 pictures are needed: squid_head, squid_body, squid_points"));
+		return;
+	}
+
+	// composite operation 1: result = head + body (overwrite head)
+	CompositeImages(pHeadDoc->GetImage(), pBodyDoc->GetImage(), 0 /* Operator 0: + */);
+
+	// composite operation 2: result - points
+	CompositeImages(pHeadDoc->GetImage(), pPointsDoc->GetImage(), 1 /* Operator 1: - */);
+
+	pHeadDoc->CalculateHistogram();
+	pHeadDoc->UpdateAllViews(NULL);
+
+	AfxMessageBox(_T("Auto composite completed.\n\nResult can be seen in squid_head picture."));
 }

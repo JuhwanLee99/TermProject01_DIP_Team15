@@ -270,18 +270,20 @@ IDI_HISTOGRAM_GRAY      ICON                    "res\\Gray.ico"
 
 IDR_MAINFRAME MENU
 BEGIN
-    POPUP "File(&F)"
-    BEGIN
-        MENUITEM "New(&N)\tCtrl+N",             ID_FILE_NEW
-        MENUITEM "Open(&O)...\tCtrl+O",         ID_FILE_OPEN
-        MENUITEM "Close(&C)",                   ID_FILE_CLOSE
-        MENUITEM SEPARATOR
-        MENUITEM "Printer setup(&R)...",        ID_FILE_PRINT_SETUP
-        MENUITEM SEPARATOR
-        MENUITEM "최근에 사용한 파일",                  ID_FILE_MRU_FILE1, GRAYED
-        MENUITEM SEPARATOR
-        MENUITEM "exit(&X)",                    ID_APP_EXIT
-    END
+POPUP "File(&F)"
+BEGIN
+            MENUITEM "New(&N)\tCtrl+N",             ID_FILE_NEW
+            MENUITEM "Open(&O)...\tCtrl+O",         ID_FILE_OPEN
+            MENUITEM "Close(&C)",                   ID_FILE_CLOSE
+            MENUITEM SEPARATOR
+            MENUITEM "Printer setup(&R)...",        ID_FILE_PRINT_SETUP
+            MENUITEM SEPARATOR
+            MENUITEM "최근에 사용한 파일",                  ID_FILE_MRU_FILE1, GRAYED
+            MENUITEM SEPARATOR
+            MENUITEM "Open Squid Images", ID_OPEN_SQUID_IMAGES
+            MENUITEM SEPARATOR
+            MENUITEM "exit(&X)",                    ID_APP_EXIT
+            END
     POPUP "View(&V)"
     BEGIN
         MENUITEM "Status bar(&S)",              ID_VIEW_STATUS_BAR
@@ -308,6 +310,8 @@ BEGIN
         MENUITEM SEPARATOR
         MENUITEM "최근에 사용한 파일",                  ID_FILE_MRU_FILE1, GRAYED
         MENUITEM SEPARATOR
+        MENUITEM "Open Squid Images",          ID_OPEN_SQUID_IMAGES
+        MENUITEM SEPARATOR
         MENUITEM "exit(&X)",                    ID_APP_EXIT
     END
     POPUP "Edition(&E)"
@@ -323,6 +327,7 @@ BEGIN
         MENUITEM "&Brightness",                 ID_PROCESS_BRIGHTNESS
         MENUITEM "&Mosaic",                     ID_PROCESS_MOSAIC
         MENUITEM "&Composite",                  ID_PROCESS_COMPOSITE
+        MENUITEM "Auto Composite Squid Images", ID_AUTO_COMPOSITE_SQUID_IMAGES
         MENUITEM "&Intensity Transform",        ID_PROCESS_INTENSITY_TRANSFORM
         MENUITEM "Contrast &Stretch",           ID_PROCESS_CONTRAST_STRETCH
         MENUITEM "Histogram &Equalization",     ID_PROCESS_EQUALIZATION

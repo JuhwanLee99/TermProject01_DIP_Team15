@@ -129,29 +129,6 @@ BOOL CImageProcessingApp::InitInstance()
 	pMainFrame->ShowWindow(m_nCmdShow);
 	pMainFrame->UpdateWindow();
 
-	// open squid pictures
-	CDocument* pDocBody = OpenDocumentFile(GetTestImagePath(_T("Term_Project_01_Sample Images\\squid_body.jpg")));
-	CDocument* pDocHead = OpenDocumentFile(GetTestImagePath(_T("Term_Project_01_Sample Images\\squid_head.jpg")));
-	CDocument* pDocPoints = OpenDocumentFile(GetTestImagePath(_T("Term_Project_01_Sample Images\\squid_points.jpg")));
-
-	// cast image pointers to custom CDocument type
-	CImageProcessingDoc* pImgDocBody = dynamic_cast<CImageProcessingDoc*>(pDocBody);
-	CImageProcessingDoc* pImgDocHead = dynamic_cast<CImageProcessingDoc*>(pDocHead);
-	CImageProcessingDoc* pImgDocPoints = dynamic_cast<CImageProcessingDoc*>(pDocPoints);
-
-	if (pImgDocBody && pImgDocHead && pImgDocPoints) { // check if pictures were opened
-
-		CxImage* pSecondImage = pImgDocHead->GetImage(); // choose head as second image
-		pImgDocBody->ApplyCompositeOperation(0, pSecondImage); // add head to first image (body)
-
-		pSecondImage = pImgDocPoints->GetImage(); // choose points as second image
-		pImgDocBody->ApplyCompositeOperation(1, pSecondImage); // substract points from first image (body + head)
-
-		// close other pictures
-		pDocHead->OnCloseDocument();
-		pDocPoints->OnCloseDocument();
-	}
-
 	return TRUE;
 }
 
